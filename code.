@@ -1,0 +1,64 @@
+board = ["-", "-", "-",
+         "-", "-", "-",
+         "-", "-", "-"]
+result = 'X'
+
+def ttt_board():
+    print(board[0] + ' | ' + board[1] + ' | ' + board[2] + ' | ')
+    print(board[3] + ' | ' + board[4] + ' | ' + board[5] + ' | ')
+    print(board[6] + ' | ' + board[7] + ' | ' + board[8] + ' | ')
+
+def player_input():
+    global result
+    while result not in ['X', 'O']:
+        result = input("Enter either 'X' or 'O': ").upper()
+        if result not in ['X', 'O']:
+            print("Sorry, but enter either 'X' or 'O'.")
+
+def place_marker():
+    global result
+    global board
+    position = int(input("Enter position:"))
+    isValid = space_check(position)
+    if isValid:
+        board[position-1] = result
+    else:
+        print("Position is not valid")
+        place_marker()  # Repeatedly ask for input until a valid position is entered
+    if result == 'X':
+        result = 'O'
+    else:
+        result = 'X'
+
+def space_check(position):
+    if board[position-1] == '-':
+        return True
+    else:
+        return False
+
+def checkXorO(val):
+    return val not in "XO"
+
+def checkCompleted():
+    return all(map(checkXorO, board))
+
+def win_game():
+    if (board[0] == board[1] == board[2] or
+        board[3] == board[4] == board[5] or
+        board[6] == board[7] == board[8] or
+        board[0] == board[3] == board[6] or
+        board[1] == board[4] == board[7] or
+        board[2] == board[5] == board[8] or
+        board[0] == board[4] == board[8] or
+        board[2] == board[4] == board[6]):
+        print("Winner")
+        return True
+    return False
+
+while True:
+    ttt_board()
+    player_input()
+    place_marker()
+    if checkCompleted() or win_game():
+        ttt_board()
+        break
